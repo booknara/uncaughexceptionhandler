@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Properties>
+        <Property name="log-path">logs</Property>
+        <Property name="date-stamp">yyyy-MM-dd</Property>
+        <Property name="pattern">%-5level %d{yyyy-MM-dd/HH:mm:ss.SSS/zzz} [%t] %c:%M(%L): %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="console-log" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern}"/>
+        </Console>
+
+        <RollingFile name="trace-log" fileName="${log-path}/app-trace.log"
+                     filePattern="${log-path}/app-trace-%d{${date-stamp}}.log">
+            <PatternLayout pattern="${pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="error-log" fileName="${log-path}/app-error.log"
+                     filePattern="${log-path}/app-error-%d{${date-stamp}}.log">
+            <PatternLayout pattern="${pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.github.booknara.uncaughtexceptionhandler" level="trace" additivity="false">
+            <appender-ref ref="trace-log" level="debug"/>
+            <appender-ref ref="error-log" level="error"/>
+            <appender-ref ref="console-log" level="debug"/>
+        </Logger>
+
+        <Root level="info" additivity="false">
+            <AppenderRef ref="console-log"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>
